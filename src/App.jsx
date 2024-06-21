@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import RewardPointsForm from "./components/RewardPointsForm";
+import "./App.css";
 
 const App = () => {
   const [rewardPoints, setRewardPoints] = useState(null);
