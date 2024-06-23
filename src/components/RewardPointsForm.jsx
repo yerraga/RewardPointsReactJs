@@ -1,27 +1,67 @@
 import React, { useState } from "react";
 import "./RewardPointsForm.css";
 
-const RewardPointsForm = ({ onSubmit }) => {
-  const [customerId, setCustomerId] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+const RewardPointsForm = ({ onSubmit, onCustomerIdChange, formValues }) => {
+  const [localFormValues, setLocalFormValues] = useState({
+    customerId: "",
+    startDate: "",
+    endDate: "",
+    firstName: "",
+    lastName: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "customerId") {
+      onCustomerIdChange(value); // Call parent component function to fetch customer details
+    }
+
+    // Always update the local form values state for all fields
+    setLocalFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ customerId, startDate, endDate });
+    onSubmit(localFormValues);
   };
 
   return (
     <div className="RewardPoint">
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="customerId"> Customer ID:</label>
+          <label htmlFor="customerId">Customer ID:</label>
           <input
             type="text"
             id="customerId"
-            value={customerId}
-            onChange={(e) => setCustomerId(e.target.value)}
+            name="customerId"
+            value={localFormValues.customerId}
+            onChange={handleChange}
             required
+          />
+        </div>
+        <br />
+        <div>
+          <label htmlFor="firstName">First Name:</label>
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            value={formValues.firstName}
+            readOnly
+          />
+        </div>
+        <br />
+        <div>
+          <label htmlFor="lastName">Last Name:</label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            value={formValues.lastName}
+            readOnly
           />
         </div>
         <br />
@@ -30,8 +70,9 @@ const RewardPointsForm = ({ onSubmit }) => {
           <input
             type="date"
             id="startDate"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            name="startDate"
+            value={localFormValues.startDate}
+            onChange={handleChange}
             required
           />
         </div>
@@ -41,8 +82,9 @@ const RewardPointsForm = ({ onSubmit }) => {
           <input
             type="date"
             id="endDate"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            name="endDate"
+            value={localFormValues.endDate}
+            onChange={handleChange}
             required
           />
         </div>
